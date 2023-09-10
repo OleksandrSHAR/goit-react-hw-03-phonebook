@@ -20,7 +20,21 @@ const initialValues = {
 
 export class App extends Component {
   state = { ...initialValues };
+  componentDidMount = () => {
+    const saveCont = localStorage.getItem('contacts');
+    if (saveCont !== null) {
+      this.setState({
+        contacts: JSON.parse(saveCont),
+      });
+    }
+  };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    const isNewContact = prevState.contacts !== this.state.contacts;
+
+    if (isNewContact)
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+  };
   submitContact = (values, { resetForm }) => {
     if (
       this.state.contacts.filter(
